@@ -168,6 +168,7 @@
             <arg path="./packages/*/src"/>
             <arg path="./packages/*/tests"/>
             <arg value="--level=0"/>
+            <arg value="-vvv"/>
         </exec>
     </target>
 
