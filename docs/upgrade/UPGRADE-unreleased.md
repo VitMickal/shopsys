@@ -75,6 +75,27 @@ There you can find links to upgrade notes for other versions too.
 - *(optional)* in your `base.html.twig` template move non-essential javascript files at the bottom of a page (([#703](https://github.com/shopsys/shopsys/pull/703)))
     - we cannot provide exact instructions as we don't know your implementation, for an example take a look at [changes](https://github.com/shopsys/shopsys/pull/703/files#diff-4c948fb55a9ceba2f3070e572ac506f3)
     - you can use new simplified jquery-ui.min.js file, but please be aware that if your implementation uses more components from jQueryUI, you have to be extra careful
+- remove usages of inherited `OrderItem` classes ([#715](https://github.com/shopsys/shopsys/pull/715))
+    - replace usages of `OrderProduct`, `OrderPayment`, and `OrderTransport` with common `OrderItem`
+        - use `isType<type>()` method instead of `instanceof`
+    - replace usages of `OrderTransportData`, `OrderPaymentData` with common `OrderItemData`
+    - replace usages of `OrderProductFactoryInterface`, `OrderPaymentFactoryInterface` and `OrderTransportFactoryInterface` with common `OrderItemFactoryInterface`
+        - replace usages of `OrderProductFactory`, `OrderPaymentFactory` and `OrderTransportFactory` with `OrderItemFactory`
+        - replace usages of method `create()` with `createProduct()`, `createPayment()` or `createTransport()`, respectively
+    - replace usages of `OrderPaymentDataFactoryInterface` and `OrderTransportDataFactoryInterface` with common `OrderItemDataFactoryInterface`
+        - replace usages of `OrderPaymentDataFactory` and `OrderTransportDataFactory` with common `OrderItemDataFactory`
+        - replaces usages of method `createFromOrderPayment()` and `createFromOrderTransport()` with `createFromOrderItem()`
+    - following classes changed constructors, if you extend them, change them appropriately:
+        - `Order`
+        - `OrderDataFactory`
+        - `OrderItemFacade`
+        - `OrderFacade`
+    - remove non-existing test cases from `EntityExtensionTest`
+        - remove `ExtendedOrder*` classes
+        - remove calling `doTestExtendedEntityInstantiation` with classes that are removed
+        - change `ExtendedOrderItem` to standard class - remove `abstract` and inheritance annotations
+        - change `doTestExtendedOrderItemsPersistence` to test only `OrderItem`
+        - please find inspiration in [#715](https://github.com/shopsys/shopsys/pull/715/files)
 
 ## [shopsys/migrations]
 - `GenerateMigrationsService` class was renamed to `MigrationsGenerator`, so change it's usage appropriately ([#627](https://github.com/shopsys/shopsys/pull/627))
