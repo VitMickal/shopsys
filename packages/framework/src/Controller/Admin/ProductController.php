@@ -24,6 +24,7 @@ use Shopsys\FrameworkBundle\Model\Product\ProductFacade;
 use Shopsys\FrameworkBundle\Model\Product\ProductVariantFacade;
 use Shopsys\FrameworkBundle\Twig\ProductExtension;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends AdminBaseController
 {
@@ -167,7 +168,12 @@ class ProductController extends AdminBaseController
      */
     public function newAction(Request $request)
     {
-        $productData = $this->productDataFactory->create();
+        try {
+            $productData = $this->productDataFactory->create();
+        } catch (NotFoundHttpException $e) {
+            $this->getFlashMessageSender()->addErrorFlash(t('Please fill all default values before creating a product'));
+            return $this->redirectToRoute('admin_default_dashboard');
+        }
 
         $form = $this->createForm(ProductFormType::class, $productData, ['product' => null]);
         $form->handleRequest($request);
