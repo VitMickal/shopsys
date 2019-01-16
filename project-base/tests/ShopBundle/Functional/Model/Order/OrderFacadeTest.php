@@ -46,13 +46,10 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
         /** @var \Shopsys\FrameworkBundle\Model\Cart\Item\CartItemFactory $cartItemFactory */
         $cartItemFactory = $this->getContainer()->get(CartItemFactory::class);
 
-        $cart = $cartFacade->getCartOfCurrentCustomer();
-
-        $customerIdentifier = new CustomerIdentifier('randomString');
-
+        $cart = $cartFacade->getCartOfCurrentCustomerCreateIfNotExists();
         $product = $productRepository->getById(1);
 
-        $cart->addProduct($customerIdentifier, $product, 1, $productPriceCalculation, $cartItemFactory);
+        $cart->addProduct($product, 1, $productPriceCalculation, $cartItemFactory);
 
         $transport = $transportRepository->getById(1);
         $payment = $paymentRepository->getById(1);
@@ -84,6 +81,8 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
         $orderData->note = 'note';
         $orderData->domainId = 1;
         $orderData->currency = $this->getReference(CurrencyDataFixture::CURRENCY_CZK);
+
+
 
         $orderPreview = $orderPreviewFactory->createForCurrentUser($transport, $payment);
         $order = $orderFacade->createOrder($orderData, $orderPreview, null);
