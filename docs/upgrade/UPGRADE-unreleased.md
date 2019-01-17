@@ -45,6 +45,10 @@ There you can find links to upgrade notes for other versions too.
         - change `ExtendedOrderItem` to standard class - remove `abstract` and inheritance annotations
         - change `doTestExtendedOrderItemsPersistence` to test only `OrderItem`
         - please find inspiration in [#715](https://github.com/shopsys/shopsys/pull/715/files)
+- *(optional)* upgrade npm packages to the latest version ([#755](https://github.com/shopsys/shopsys/pull/755))
+    - remove all npm packages by removing folder `project-base/node_modules` and `project-base/package-lock.json`
+    - run command `php phing npm`
+    - in order to pass standards tests you also need to run `php phing eslint-fix` to let ESlint npm package update your JavaScript files. After that your syntax should be updated to latest JavaScript standards checked by ESLint.
 
 [Upgrade from v7.0.0-beta5 to Unreleased]: https://github.com/shopsys/shopsys/compare/v7.0.0-beta5...HEAD
 [shopsys/shopsys]: https://github.com/shopsys/shopsys
