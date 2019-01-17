@@ -4,6 +4,7 @@ namespace Tests\ShopBundle\Functional\EntityExtension\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Prezent\Doctrine\Translatable\Annotation as Prezent;
 use Shopsys\FrameworkBundle\Model\Product\ProductData;
 use Shopsys\ShopBundle\Model\Product\Product;
 
@@ -19,6 +20,13 @@ class ExtendedProduct extends Product
      * @ORM\Column(type="string", nullable=true)
      */
     protected $stringField;
+
+    /**
+     * @var \Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedProductTranslation[]
+     *
+     * @Prezent\Translations(targetEntity="\Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedProductTranslation")
+     */
+    protected $translations;
 
     /**
      * @var \Tests\ShopBundle\Functional\EntityExtension\Model\UnidirectionalEntity
@@ -333,5 +341,13 @@ class ExtendedProduct extends Product
     public function setStringField($stringField): void
     {
         $this->stringField = $stringField;
+    }
+
+    /**
+     * @return \Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedProductTranslation
+     */
+    protected function createTranslation(): ExtendedProductTranslation
+    {
+        return new ExtendedProductTranslation();
     }
 }

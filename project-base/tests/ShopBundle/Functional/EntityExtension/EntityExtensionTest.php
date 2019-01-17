@@ -13,6 +13,7 @@ use Shopsys\FrameworkBundle\Model\Order\Item\OrderProduct;
 use Shopsys\FrameworkBundle\Model\Order\Item\OrderTransport;
 use Shopsys\FrameworkBundle\Model\Payment\Payment;
 use Shopsys\FrameworkBundle\Model\Product\Brand\Brand;
+use Shopsys\FrameworkBundle\Model\Product\ProductTranslation;
 use Shopsys\ShopBundle\Model\Category\Category;
 use Shopsys\ShopBundle\Model\Order\Order;
 use Shopsys\ShopBundle\Model\Order\Order as ExtendedOrder;
@@ -28,6 +29,7 @@ use Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedOrderPayment;
 use Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedOrderProduct;
 use Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedOrderTransport;
 use Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedProduct;
+use Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedProductTranslation;
 use Tests\ShopBundle\Functional\EntityExtension\Model\ProductManyToManyBidirectionalEntity;
 use Tests\ShopBundle\Functional\EntityExtension\Model\ProductOneToManyBidirectionalEntity;
 use Tests\ShopBundle\Functional\EntityExtension\Model\ProductOneToOneBidirectionalEntity;
@@ -70,6 +72,7 @@ class EntityExtensionTest extends TransactionFunctionalTestCase
             OrderTransport::class => ExtendedOrderTransport::class,
             Brand::class => ExtendedBrand::class,
             Order::class => ExtendedOrder::class,
+            ProductTranslation::class => ExtendedProductTranslation::class,
         ];
 
         $newEntities = [
@@ -163,6 +166,7 @@ class EntityExtensionTest extends TransactionFunctionalTestCase
         $this->doTestExtendedEntityInstantiation(OrderPayment::class, ExtendedOrderPayment::class, self::ORDER_PAYMENT_ID);
         $this->doTestExtendedEntityInstantiation(OrderProduct::class, ExtendedOrderProduct::class, self::ORDER_PRODUCT_ID);
         $this->doTestExtendedEntityInstantiation(OrderTransport::class, ExtendedOrderTransport::class, self::ORDER_TRANSPORT_ID);
+        $this->doTestExtendedEntityInstantiation(ProductTranslation::class, ExtendedProductTranslation::class, self::MAIN_PRODUCT_ID);
     }
 
     private function doTestExtendedProductPersistence(): void
