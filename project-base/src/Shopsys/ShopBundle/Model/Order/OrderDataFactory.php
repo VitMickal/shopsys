@@ -9,7 +9,7 @@ use Shopsys\FrameworkBundle\Model\Order\OrderDataFactory as BaseOrderDataFactory
 class OrderDataFactory extends BaseOrderDataFactory
 {
     /**
-     * @return \Shopsys\ShopBundle\Model\Order\OrderData
+     * @return \Shopsys\ShopBundle\Model\Order\OrderDataphp
      */
     public function create(): BaseOrderData
     {
@@ -35,5 +35,6 @@ class OrderDataFactory extends BaseOrderDataFactory
     protected function fillFromOrder(BaseOrderData $orderData, BaseOrder $order)
     {
         parent::fillFromOrder($orderData, $order);
+        $orderData->orderTip = $this->orderItemDataFactory->createFromOrderItem($order->getTip());
     }
 }

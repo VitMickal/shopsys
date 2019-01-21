@@ -30,4 +30,14 @@ class OrderItemDataFactory extends BaseOrderItemDataFactory
 
         return $orderItemData;
     }
+
+    /**
+     * @param \Shopsys\ShopBundle\Model\Order\Item\OrderItemData $orderItemData
+     * @param \Shopsys\ShopBundle\Model\Order\Item\OrderItem $orderItem
+     */
+    protected function fillFromOrderItem(BaseOrderItemData $orderItemData, BaseOrderItem $orderItem)
+    {
+        parent::fillFromOrderItem($orderItemData, $orderItem);
+        $orderItemData->someBoolean = $orderItem->isSomeBoolean();
+    }
 }

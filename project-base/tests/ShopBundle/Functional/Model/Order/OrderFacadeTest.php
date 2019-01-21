@@ -114,7 +114,7 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
         $this->assertSame($orderData->note, $orderFromDb->getNote());
         $this->assertSame($orderData->domainId, $orderFromDb->getDomainId());
 
-        $this->assertCount(3, $orderFromDb->getItems());
+        $this->assertCount(4, $orderFromDb->getItems());
     }
 
     public function testEdit()
@@ -129,7 +129,7 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
         /** @var \Shopsys\ShopBundle\Model\Order\Order $order */
         $order = $this->getReference('order_1');
 
-        $this->assertCount(4, $order->getItems());
+        $this->assertCount(5, $order->getItems());
 
         $orderData = $orderDataFactory->createFromOrder($order);
 
@@ -158,6 +158,6 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
 
         $orderFromDb = $orderRepository->getById($order->getId());
 
-        $this->assertCount(5, $orderFromDb->getItems());
+        $this->assertCount(6, $orderFromDb->getItems());
     }
 }

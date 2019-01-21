@@ -42,3 +42,11 @@ services:
     Shopsys\ShopBundle\Form\Admin\PaymentFormTypeExtension:
         tags:
             - { name: form.type_extension, extended_type: Shopsys\FrameworkBundle\Form\Admin\Payment\PaymentFormType }
+
+    Shopsys\ShopBundle\Form\Admin\OrderItemsFormTypeExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Shopsys\FrameworkBundle\Form\OrderItemsType }
+
+    Shopsys\ShopBundle\Form\Admin\OrderItemFormTypeExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Shopsys\FrameworkBundle\Form\Admin\Order\OrderItemFormType }

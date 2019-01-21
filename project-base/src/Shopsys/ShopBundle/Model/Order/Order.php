@@ -10,6 +10,7 @@ use Shopsys\FrameworkBundle\Model\Order\Order as BaseOrder;
 use Shopsys\FrameworkBundle\Model\Order\OrderData as BaseOrderData;
 use Shopsys\FrameworkBundle\Model\Order\OrderEditResult;
 use Shopsys\FrameworkBundle\Model\Order\OrderPriceCalculation;
+use Shopsys\ShopBundle\Model\Order\Item\OrderItem;
 
 /**
  * @ORM\Table(name="orders")
@@ -46,5 +47,52 @@ class Order extends BaseOrder
         OrderPriceCalculation $orderPriceCalculation
     ): OrderEditResult {
         return parent::edit($orderData, $orderItemPriceCalculation, $orderItemFactory, $orderPriceCalculation);
+    }
+
+    /**
+     * @return \Shopsys\FrameworkBundle\Model\Order\Item\OrderItem[]
+     */
+    public function getItemsWithoutTransportAndPayment()
+    {
+        $itemsWithoutTransportAndPayment = [];
+        foreach ($this->getItems() as $orderItem) {
+            /** @var \Shopsys\ShopBundle\Model\Order\Item\OrderItem $orderItem */
+            if (!($orderItem->isTypeTransport() || $orderItem->isTypePayment() || $orderItem->isTypeTip())) {
+                $itemsWithoutTransportAndPayment[] = $orderItem;
+            }
+        }
+
+        return $itemsWithoutTransportAndPayment;
+    }
+
+    /**
+     * @return \Shopsys\ShopBundle\Model\Order\Item\OrderItem
+     */
+    public function getTip(): OrderItem
+    {
+        foreach ($this->getItems() as $item) {
+            /** @var \Shopsys\ShopBundle\Model\Order\Item\OrderItem $item */
+            if ($item->isTypeTip()) {
+                return $item;
+            }
+        }
+    }
+
+    /**
+     * @param \Shopsys\FrameworkBundle\Model\Order\OrderData $orderData
+     */
+    protected function editData(BaseOrderData $orderData)
+    {
+        parent::editData($orderData);
+        $this->editOrderTip($orderData);
+    }
+
+    /**
+     * @param \Shopsys\ShopBundle\Model\Order\OrderData $orderData
+     */
+    protected function editOrderTip(BaseOrderData $orderData)
+    {
+        $orderTipData = $orderData->orderTip;
+        $this->getTip()->edit($orderTipData);
     }
 }
