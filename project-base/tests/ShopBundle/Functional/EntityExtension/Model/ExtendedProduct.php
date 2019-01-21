@@ -22,13 +22,6 @@ class ExtendedProduct extends Product
     protected $stringField;
 
     /**
-     * @var \Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedProductTranslation[]
-     *
-     * @Prezent\Translations(targetEntity="\Tests\ShopBundle\Functional\EntityExtension\Model\ExtendedProductTranslation")
-     */
-    protected $translations;
-
-    /**
      * @var \Tests\ShopBundle\Functional\EntityExtension\Model\UnidirectionalEntity
      *
      * @ORM\ManyToOne(targetEntity="UnidirectionalEntity")
