@@ -4,7 +4,6 @@ namespace Tests\ShopBundle\Functional\EntityExtension\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Prezent\Doctrine\Translatable\Annotation as Prezent;
 use Shopsys\FrameworkBundle\Model\Product\ProductData;
 use Shopsys\ShopBundle\Model\Product\Product;
 
