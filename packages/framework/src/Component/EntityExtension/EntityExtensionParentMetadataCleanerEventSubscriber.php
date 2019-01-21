@@ -38,7 +38,7 @@ class EntityExtensionParentMetadataCleanerEventSubscriber implements EventSubscr
     {
         $meta = $eventArgs->getClassMetadata();
         $entityName = $meta->getName();
-        if ($this->entityNameResolver->resolve($entityName) !== $entityName) {
+        if ($this->mustClean($entityName)) {
             $meta->isMappedSuperclass = true;
             $meta->identifier = [];
             $meta->generatorType = ClassMetadataInfo::GENERATOR_TYPE_NONE;
@@ -53,5 +53,32 @@ class EntityExtensionParentMetadataCleanerEventSubscriber implements EventSubscr
             $meta->discriminatorMap = [];
             $meta->discriminatorValue = null;
         }
+    }
+
+    /**
+     * @param string $entityName
+     * @return bool
+     */
+    private function mustClean(string $entityName): bool
+    {
+        return $this->isExtended($entityName) && !$this->isTranslation($entityName);
+    }
+
+    /**
+     * @param string $entityName
+     * @return bool
+     */
+    private function isExtended(string $entityName): bool
+    {
+        return $this->entityNameResolver->resolve($entityName) !== $entityName;
+    }
+
+    /**
+     * @param string $entityName
+     * @return bool
+     */
+    private function isTranslation(string $entityName): bool
+    {
+        return (bool)preg_match('~Translation$~', $entityName);
     }
 }
