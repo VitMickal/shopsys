@@ -78,7 +78,7 @@ class OrderFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $domainId = $options['order']->getDomainId();
-        $countries = $this->countryFacade->getAllByDomainId($domainId);
+        $countries = $this->countryFacade->getAllEnabledOnDomain($domainId);
         $builder
             ->add($this->createBasicInformationGroup($builder, $options['order']))
             ->add($this->createPersonalDataGroup($builder))
