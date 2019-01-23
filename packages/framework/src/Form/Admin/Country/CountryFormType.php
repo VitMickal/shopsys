@@ -3,7 +3,6 @@
 namespace Shopsys\FrameworkBundle\Form\Admin\Country;
 
 use Shopsys\FormTypesBundle\MultidomainType;
-use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Form\DisplayOnlyType;
 use Shopsys\FrameworkBundle\Form\DomainsType;
 use Shopsys\FrameworkBundle\Form\Locale\LocalizedType;
@@ -31,18 +30,11 @@ class CountryFormType extends AbstractType
     protected $countryFacade;
 
     /**
-     * @var \Shopsys\FrameworkBundle\Component\Domain\Domain
-     */
-    protected $domain;
-
-    /**
      * @param \Shopsys\FrameworkBundle\Model\Country\CountryFacade $countryFacade
-     * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      */
-    public function __construct(CountryFacade $countryFacade, Domain $domain)
+    public function __construct(CountryFacade $countryFacade)
     {
         $this->countryFacade = $countryFacade;
-        $this->domain = $domain;
     }
 
     /**
@@ -93,6 +85,7 @@ class CountryFormType extends AbstractType
                 'entry_options' => [
                     'required' => false,
                     'constraints' => [
+                        new Constraints\Type(['type' => 'numeric']),
                         new Constraints\GreaterThanOrEqual(['value' => 0]),
                     ],
                 ],
