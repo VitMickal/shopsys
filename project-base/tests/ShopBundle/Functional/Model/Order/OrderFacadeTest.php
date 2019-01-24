@@ -8,7 +8,6 @@ use Shopsys\FrameworkBundle\DataFixtures\Demo\CurrencyDataFixture;
 use Shopsys\FrameworkBundle\DataFixtures\Demo\OrderStatusDataFixture;
 use Shopsys\FrameworkBundle\Model\Cart\CartFacade;
 use Shopsys\FrameworkBundle\Model\Cart\Item\CartItemFactory;
-use Shopsys\FrameworkBundle\Model\Customer\CustomerIdentifier;
 use Shopsys\FrameworkBundle\Model\Order\Item\OrderItemData;
 use Shopsys\FrameworkBundle\Model\Order\OrderDataFactoryInterface;
 use Shopsys\FrameworkBundle\Model\Order\OrderFacade;
@@ -81,8 +80,6 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
         $orderData->note = 'note';
         $orderData->domainId = 1;
         $orderData->currency = $this->getReference(CurrencyDataFixture::CURRENCY_CZK);
-
-
 
         $orderPreview = $orderPreviewFactory->createForCurrentUser($transport, $payment);
         $order = $orderFacade->createOrder($orderData, $orderPreview, null);

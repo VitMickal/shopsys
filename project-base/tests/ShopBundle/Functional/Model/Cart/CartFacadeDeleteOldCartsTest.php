@@ -14,12 +14,10 @@ use Shopsys\FrameworkBundle\Model\Customer\CurrentCustomer;
 use Shopsys\FrameworkBundle\Model\Customer\CustomerFacade;
 use Shopsys\FrameworkBundle\Model\Customer\CustomerIdentifier;
 use Shopsys\FrameworkBundle\Model\Customer\CustomerIdentifierFactory;
-use Shopsys\FrameworkBundle\Model\Customer\User;
 use Shopsys\FrameworkBundle\Model\Order\PromoCode\CurrentPromoCodeFacade;
 use Shopsys\FrameworkBundle\Model\Product\Pricing\ProductPriceCalculationForUser;
 use Shopsys\FrameworkBundle\Model\Product\ProductFacade;
 use Shopsys\FrameworkBundle\Model\Product\ProductRepository;
-use Shopsys\ShopBundle\Model\Product\Product;
 use Tests\ShopBundle\Test\TransactionFunctionalTestCase;
 
 class CartFacadeDeleteOldCartsTest extends TransactionFunctionalTestCase
@@ -110,7 +108,7 @@ class CartFacadeDeleteOldCartsTest extends TransactionFunctionalTestCase
 
         $user = $customerFacade->getUserById(1);
 
-        return $this->getCartFacadeForCustomer($this->getCustomerIdentifierForRegisteredCustomer($user));
+        return $this->getCartFacadeForCustomer($this->getCustomerIdentifierForRegisteredCustomer());
     }
 
     /**
@@ -170,7 +168,7 @@ class CartFacadeDeleteOldCartsTest extends TransactionFunctionalTestCase
 
     /**
      * @param \Shopsys\FrameworkBundle\Model\Cart\CartFacade $cartFacade
-     * @param int $count
+     * @param \Shopsys\FrameworkBundle\Model\Customer\CustomerIdentifier $customerIdentifier
      * @param string $message
      */
     private function assertCartIsNotDeleted(CartFacade $cartFacade, CustomerIdentifier $customerIdentifier, $message)
@@ -180,7 +178,6 @@ class CartFacadeDeleteOldCartsTest extends TransactionFunctionalTestCase
     }
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Customer\User $user
      * @return \Shopsys\FrameworkBundle\Model\Customer\CustomerIdentifier
      */
     private function getCustomerIdentifierForRegisteredCustomer()
