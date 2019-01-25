@@ -20,9 +20,9 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class CountryFormType extends AbstractType
 {
     /**
-     * @var string
+     * @var \Shopsys\FrameworkBundle\Model\Country\Country
      */
-    protected $countryCode;
+    protected $country;
 
     /**
      * @var \Shopsys\FrameworkBundle\Model\Country\CountryFacade
@@ -44,12 +44,12 @@ class CountryFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var \Shopsys\FrameworkBundle\Model\Country\Country|null $country */
-        $country = $options['country'];
+        $this->country = $options['country'];
 
-        if ($country instanceof Country) {
+        if ($this->country instanceof Country) {
             $builder->add('formId', DisplayOnlyType::class, [
                 'label' => t('ID'),
-                'data' => $country->getId(),
+                'data' => $this->country->getId(),
             ]);
         }
 
@@ -115,11 +115,11 @@ class CountryFormType extends AbstractType
      */
     public function validateUniqueCode($countryCodeValue, ExecutionContextInterface $context): void
     {
-        if ($this->countryCode === null || $countryCodeValue !== $this->countryCode) {
-            $countryCode = $this->countryFacade->getByCode($countryCodeValue);
+        if ($this->country === null || $countryCodeValue !== $this->country->getCode()) {
+            $country = $this->countryFacade->getByCode($countryCodeValue);
 
-            if ($countryCode !== null) {
-                $this->countryCode = $countryCode->getCode();
+            if ($country !== null) {
+                $this->country = $country;
                 $context->addViolation('Country code with this code already exists');
             }
         }
