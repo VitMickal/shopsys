@@ -58,9 +58,7 @@ class CartMigrationFacade
         $currentCart = $this->cartFacade->getCartByCustomerIdentifierCreateIfNotExists($customerIdentifier);
         $currentCart->mergeWithCart($cart, $this->cartItemFactory);
 
-        foreach ($cart->getItems() as $itemToRemove) {
-            $this->em->remove($itemToRemove);
-        }
+        $this->cartFacade->deleteCart($cart);
 
         foreach ($currentCart->getItems() as $item) {
             $this->em->persist($item);

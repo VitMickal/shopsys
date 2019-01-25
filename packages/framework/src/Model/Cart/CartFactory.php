@@ -13,7 +13,6 @@ class CartFactory
     protected $entityNameResolver;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Cart\Watcher\CartWatcherFacade $cartWatcherFacade
      * @param \Shopsys\FrameworkBundle\Component\EntityExtension\EntityNameResolver $entityNameResolver
      */
     public function __construct(EntityNameResolver $entityNameResolver)

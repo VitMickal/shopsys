@@ -78,7 +78,7 @@ class CartTest extends TestCase
         $cartItem = new CartItem($cart, $product, 1, '0.0');
         $cart->addItem($cartItem);
 
-        $this->assertFalse($cart->IsEmpty());
+        $this->assertFalse($cart->isEmpty());
     }
 
     public function testClean()

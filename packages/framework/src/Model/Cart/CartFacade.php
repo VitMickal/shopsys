@@ -126,8 +126,8 @@ class CartFacade
         );
         $cart = $this->getCartOfCurrentCustomerCreateIfNotExists();
 
-        $result = $cart->addProduct($product, $quantity, $this->productPriceCalculation, $this->cartItemFactory);
         /* @var $result \Shopsys\FrameworkBundle\Model\Cart\AddProductResult */
+        $result = $cart->addProduct($product, $quantity, $this->productPriceCalculation, $this->cartItemFactory);
 
         $this->em->persist($result->getCartItem());
         $this->em->flush();
@@ -141,6 +141,11 @@ class CartFacade
     public function changeQuantities(array $quantitiesByCartItemId)
     {
         $cart = $this->findCartOfCurrentCustomer();
+
+        if ($cart === null) {
+            throw new \Shopsys\FrameworkBundle\Model\Cart\Exception\CartIsEmptyException();
+        }
+
         $cart->changeQuantities($quantitiesByCartItemId);
         $this->em->flush();
     }
@@ -151,17 +156,22 @@ class CartFacade
     public function deleteCartItem($cartItemId)
     {
         $cart = $this->findCartOfCurrentCustomer();
+
+        if ($cart === null) {
+            throw new \Shopsys\FrameworkBundle\Model\Cart\Exception\CartIsEmptyException();
+        }
+
         $cartItemToDelete = $cart->getItemById($cartItemId);
         $cart->removeItemById($cartItemId);
         $this->em->remove($cartItemToDelete);
         $this->em->flush();
 
-        if (count($cart->getItems()) === 0) {
+        if ($cart->isEmpty()) {
             $this->deleteCart($cart);
         }
     }
 
-    public function cleanCart()
+    public function deleteCartOfCurrentCustomer()
     {
         $cart = $this->findCartOfCurrentCustomer();
 
