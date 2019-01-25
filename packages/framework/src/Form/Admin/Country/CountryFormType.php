@@ -116,7 +116,7 @@ class CountryFormType extends AbstractType
     public function validateUniqueCode($countryCodeValue, ExecutionContextInterface $context): void
     {
         if ($this->country === null || $countryCodeValue !== $this->country->getCode()) {
-            $country = $this->countryFacade->getByCode($countryCodeValue);
+            $country = $this->countryFacade->findByCode($countryCodeValue);
 
             if ($country !== null) {
                 $this->country = $country;

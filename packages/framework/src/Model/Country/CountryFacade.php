@@ -104,7 +104,7 @@ class CountryFacade
      * @param string $countryCode
      * @return \Shopsys\FrameworkBundle\Model\Country\Country|null
      */
-    public function getByCode(string $countryCode): ?Country
+    public function findByCode(string $countryCode): ?Country
     {
         return $this->countryRepository->findByCode($countryCode);
     }

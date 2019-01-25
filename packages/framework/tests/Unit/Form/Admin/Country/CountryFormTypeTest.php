@@ -113,7 +113,7 @@ class CountryFormTypeTest extends TypeTestCase
         $countryFormData = $this->getFullCountryFormData();
         $countryFormData['code'] = 'UZ';
 
-        $country = $this->countryFacade->getByCode('UZ');
+        $country = $this->countryFacade->findByCode('UZ');
 
         $countryForm = $this->createCountryForm($country);
         $countryForm->submit($countryFormData);
