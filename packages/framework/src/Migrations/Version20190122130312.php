@@ -46,10 +46,18 @@ class Version20190122130312 extends AbstractMigration
                 row_number = 1');
 
         $this->sql('
-            UPDATE cart_items SET cart_id = C.id
-            FROM
-              cart_items CI
-            JOIN carts C ON C.cart_identifier = CI.cart_identifier');
+            UPDATE cart_items 
+            SET cart_id = C.id 
+            FROM carts C 
+            WHERE cart_items.user_id = C.user_id AND cart_items.cart_identifier = C.cart_identifier
+        ');
+
+        $this->sql('
+            UPDATE cart_items 
+            SET cart_id = C.id 
+            FROM carts C 
+            WHERE cart_items.user_id IS NULL AND C.user_id IS NULL AND cart_items.cart_identifier = C.cart_identifier
+        ');
 
         $this->sql('ALTER TABLE cart_items DROP user_id, DROP cart_identifier');
         $this->sql('ALTER TABLE cart_items ALTER cart_id DROP DEFAULT');
