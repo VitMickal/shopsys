@@ -62,7 +62,7 @@ class Country extends AbstractTranslatableEntity
      */
     protected function setTranslations(CountryData $countryData): void
     {
-        foreach ($countryData->name as $locale => $name) {
+        foreach ($countryData->names as $locale => $name) {
             $this->translation($locale)->setName($name);
         }
     }

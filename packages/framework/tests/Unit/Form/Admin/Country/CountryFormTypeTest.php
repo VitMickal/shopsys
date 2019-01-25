@@ -46,7 +46,7 @@ class CountryFormTypeTest extends TypeTestCase
     {
         return [
             'save' => '',
-            'name' => [
+            'names' => [
                 'en' => 'Czech republic',
                 'cs' => 'Česká republika',
             ],
@@ -70,7 +70,7 @@ class CountryFormTypeTest extends TypeTestCase
         $countryForm->submit($countryFormData);
         $this->assertTrue($countryForm->isValid());
 
-        $countryFormData['name']['cs'] = '';
+        $countryFormData['names']['cs'] = '';
 
         $countryForm = $this->createCountryForm();
         $countryForm->submit($countryFormData);
@@ -142,7 +142,7 @@ class CountryFormTypeTest extends TypeTestCase
         $countryData = new CountryData();
         $countryData->code = 'UZ';
         $countryData->enabled = [1 => true, 2 => true];
-        $countryData->name = ['cs' => 'Uzbekistán', 'en' => 'Uzbekistan'];
+        $countryData->names = ['cs' => 'Uzbekistán', 'en' => 'Uzbekistan'];
 
         $country = new Country($countryData);
 

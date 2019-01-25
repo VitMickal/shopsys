@@ -42,7 +42,7 @@ class CustomerDataFactoryTest extends TestCase
         $userData->email = 'no-reply@shopsys.com';
 
         $billingCountryData = new CountryData();
-        $billingCountryData->name = ['cs' => 'Česká republika'];
+        $billingCountryData->names = ['cs' => 'Česká republika'];
         $billingCountry = new Country($billingCountryData);
         $billingAddressData = new BillingAddressData();
         $billingAddressData->street = 'street';
@@ -55,7 +55,7 @@ class CustomerDataFactoryTest extends TestCase
         $billingAddressData->country = $billingCountry;
 
         $deliveryCountryData = new CountryData();
-        $deliveryCountryData->name = ['cs' => 'Slovenská republika'];
+        $deliveryCountryData->names = ['cs' => 'Slovenská republika'];
         $deliveryCountry = new Country($deliveryCountryData);
         $deliveryAddressData = new DeliveryAddressData();
         $deliveryAddressData->addressFilled = true;
@@ -126,10 +126,10 @@ class CustomerDataFactoryTest extends TestCase
         $customerDataFactory = $this->getCustomerDataFactory();
 
         $billingCountryData = new CountryData();
-        $billingCountryData->name = ['cs' => 'Česká republika'];
+        $billingCountryData->names = ['cs' => 'Česká republika'];
 
         $deliveryCountryData = new CountryData();
-        $deliveryCountryData->name = ['cs' => 'Slovenská republika'];
+        $deliveryCountryData->names = ['cs' => 'Slovenská republika'];
 
         $billingCountry = new Country($billingCountryData);
         $deliveryCountry = new Country($deliveryCountryData);

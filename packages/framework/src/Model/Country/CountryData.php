@@ -7,7 +7,7 @@ class CountryData
     /**
      * @var string[]
      */
-    public $name;
+    public $names;
 
     /**
      * @var string|null
@@ -26,7 +26,7 @@ class CountryData
 
     public function __construct()
     {
-        $this->name = [];
+        $this->names = [];
         $this->enabled = [];
         $this->priority = [];
     }

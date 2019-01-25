@@ -54,7 +54,7 @@ class CountryFormType extends AbstractType
         }
 
         $builder
-            ->add('name', LocalizedType::class, [
+            ->add('names', LocalizedType::class, [
                 'required' => true,
                 'main_constraints' => [
                     new Constraints\NotBlank(['message' => 'Please enter country name']),

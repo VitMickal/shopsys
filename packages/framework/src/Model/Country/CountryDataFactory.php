@@ -53,7 +53,7 @@ class CountryDataFactory implements CountryDataFactoryInterface
         $translations = $country->getTranslations();
 
         foreach ($translations as $translation) {
-            $countryData->name[$translation->getLocale()] = $translation->getName();
+            $countryData->names[$translation->getLocale()] = $translation->getName();
         }
 
         foreach ($this->domain->getAllIds() as $domainId) {

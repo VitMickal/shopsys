@@ -39,7 +39,7 @@ class CountryDataFixture extends AbstractReferenceFixture
     public function load(ObjectManager $manager): void
     {
         $countryData = $this->countryDataFactory->create();
-        $countryData->name = [
+        $countryData->names = [
             'cs' => 'Česká republika',
             'en' => 'Czech republic',
         ];
@@ -47,7 +47,7 @@ class CountryDataFixture extends AbstractReferenceFixture
         $this->createCountry($countryData, self::COUNTRY_CZECH_REPUBLIC);
 
         $countryData = $this->countryDataFactory->create();
-        $countryData->name = [
+        $countryData->names = [
             'cs' => 'Slovenská republika',
             'en' => 'Slovakia',
         ];
