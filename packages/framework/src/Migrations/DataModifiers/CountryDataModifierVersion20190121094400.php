@@ -48,21 +48,15 @@ class CountryDataModifierVersion20190121094400
      */
     public function getNewIdCodePair(): array
     {
+        $data = $this->groupDataIntoDomains($this->data);
+
         $tmp = [];
-        foreach ($this->data as $row) {
-            if ($row['domain_id'] !== 1) {
-                continue;
+        foreach ($data as $domainId => $domainData) {
+            foreach ($domainData as $row) {
+                if ($domainId === 1 || !array_key_exists($row['code'], $tmp)) {
+                    $tmp[$row['code']] = $row['id'];
+                }
             }
-
-            $tmp[$row['code']] = $row['id'];
-        }
-
-        foreach ($this->data as $row) {
-            if ($row['domain_id'] === 1 || array_key_exists($row['code'], $tmp)) {
-                continue;
-            }
-
-            $tmp[$row['code']] = $row['id'];
         }
 
         return $tmp;
@@ -188,5 +182,19 @@ class CountryDataModifierVersion20190121094400
         $usedIds = array_values($this->getNewIdCodePair());
 
         return array_values(array_diff($obsoleteIds, $usedIds));
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function groupDataIntoDomains(array $data): array
+    {
+        $tmp = [];
+        foreach ($data as $row) {
+            $tmp[$row['domain_id']][] = $row;
+        }
+
+        return $tmp;
     }
 }
