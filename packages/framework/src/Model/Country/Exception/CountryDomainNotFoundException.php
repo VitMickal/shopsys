@@ -16,7 +16,7 @@ class CountryDomainNotFoundException extends Exception implements CountryExcepti
     public function __construct(int $domainId, int $countryId = null, Exception $previous = null)
     {
         $countryDescription = $countryId !== null ? sprintf('with ID %d', $countryId) : 'without ID';
-        $message = sprintf('TransportDomain for transport %s and domain ID %d not found.', $countryDescription, $domainId);
+        $message = sprintf('CountryDomain for country %s and domain ID %d not found.', $countryDescription, $domainId);
 
         parent::__construct($message, 0, $previous);
     }
