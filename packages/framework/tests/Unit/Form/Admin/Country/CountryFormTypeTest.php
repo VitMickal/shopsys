@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\FrameworkBundle\Unit\Form\Admin\Country;
 
+use ReflectionClass;
 use Shopsys\FormTypesBundle\MultidomainType;
 use Shopsys\FrameworkBundle\Component\Domain\Config\DomainConfig;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
@@ -11,6 +12,8 @@ use Shopsys\FrameworkBundle\Component\Translation\Translator;
 use Shopsys\FrameworkBundle\Form\Admin\Country\CountryFormType;
 use Shopsys\FrameworkBundle\Form\DomainsType;
 use Shopsys\FrameworkBundle\Form\Locale\LocalizedType;
+use Shopsys\FrameworkBundle\Model\Country\Country;
+use Shopsys\FrameworkBundle\Model\Country\CountryData;
 use Shopsys\FrameworkBundle\Model\Country\CountryFacade;
 use Shopsys\FrameworkBundle\Model\Localization\Localization;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
@@ -36,39 +39,12 @@ class CountryFormTypeTest extends TypeTestCase
      */
     private $countryFacade;
 
-    public function testNameIsMandatory(): void
+    /**
+     * @return array
+     */
+    private function getFullCountryFormData(): array
     {
-        $countryData = [
-            'save' => '',
-            'name' => [
-                'en' => 'Czech republic',
-                'cs' => '',
-            ],
-            'code' => 'CZ',
-            'enabled' => [
-                1 => '1',
-                2 => '1',
-            ],
-            'priority' => [
-                1 => '0',
-                2 => '0',
-            ],
-        ];
-
-        $countryForm = $this->createCountryForm();
-        $countryForm->submit($countryData);
-        $this->assertFalse($countryForm->isValid());
-
-        $countryData['name']['cs'] = 'Česká republika';
-
-        $countryForm = $this->createCountryForm();
-        $countryForm->submit($countryData);
-        $this->assertTrue($countryForm->isValid());
-    }
-
-    public function testPriorityIsNumber(): void
-    {
-        $countryData = [
+        return [
             'save' => '',
             'name' => [
                 'en' => 'Czech republic',
@@ -80,20 +56,68 @@ class CountryFormTypeTest extends TypeTestCase
                 2 => '1',
             ],
             'priority' => [
-                1 => 'asd',
-                2 => 0,
+                1 => '0',
+                2 => '0',
             ],
         ];
+    }
+
+    public function testNameIsMandatory(): void
+    {
+        $countryFormData = $this->getFullCountryFormData();
 
         $countryForm = $this->createCountryForm();
-        $countryForm->submit($countryData);
+        $countryForm->submit($countryFormData);
+        $this->assertTrue($countryForm->isValid());
+
+        $countryFormData['name']['cs'] = '';
+
+        $countryForm = $this->createCountryForm();
+        $countryForm->submit($countryFormData);
+        $this->assertFalse($countryForm->isValid());
+    }
+
+    public function testPriorityIsNumber(): void
+    {
+        $countryFormData = $this->getFullCountryFormData();
+
+        $countryFormData['priority'][1] = 'asd';
+
+        $countryForm = $this->createCountryForm();
+        $countryForm->submit($countryFormData);
         $this->assertFalse($countryForm->isValid(), 'Invalid form');
 
-        $countryData['priority'][1] = '1';
+        $countryFormData['priority'][1] = '1';
 
         $countryForm = $this->createCountryForm();
-        $countryForm->submit($countryData);
+        $countryForm->submit($countryFormData);
         $this->assertTrue($countryForm->isValid(), 'Valid form');
+    }
+
+    public function testCodeIsUnique(): void
+    {
+        $countryFormData = $this->getFullCountryFormData();
+
+        $countryForm = $this->createCountryForm();
+        $countryForm->submit($countryFormData);
+        $this->assertTrue($countryForm->isValid(), 'Non-existent country code');
+
+        $countryFormData['code'] = 'UZ';
+        $countryForm = $this->createCountryForm();
+        $countryForm->submit($countryFormData);
+        $this->assertFalse($countryForm->isValid(), 'Existing country code');
+    }
+
+    public function testCodeIsNotDuplicateOnEdit(): void
+    {
+        $countryFormData = $this->getFullCountryFormData();
+        $countryFormData['code'] = 'UZ';
+
+        $country = $this->countryFacade->getByCode('UZ');
+
+        $countryForm = $this->createCountryForm($country);
+        $countryForm->submit($countryFormData);
+        $this->assertTrue($countryForm->isValid(), 'Existing country code on edit');
     }
 
     protected function setUp()
@@ -115,8 +139,21 @@ class CountryFormTypeTest extends TypeTestCase
                 ]);
         $this->domain->method('getAllIds')->willReturn([1, 2]);
 
+        $countryData = new CountryData();
+        $countryData->code = 'UZ';
+        $countryData->enabled = [1 => true, 2 => true];
+        $countryData->name = ['cs' => 'Uzbekistán', 'en' => 'Uzbekistan'];
+
+        $country = new Country($countryData);
+
+        /* Entity returned by mock have to have Id properly set */
+        $reflection = new ReflectionClass($country);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($country, 1);
+
         $this->countryFacade = $this->createMock(CountryFacade::class);
-        $this->countryFacade->method('getByCode')->willReturn(null);
+        $this->countryFacade->method('getByCode')->willReturnMap([['CZ', null], ['UZ', $country]]);
 
         parent::setUp();
     }
@@ -141,10 +178,11 @@ class CountryFormTypeTest extends TypeTestCase
     }
 
     /**
+     * @param \Shopsys\FrameworkBundle\Model\Country\Country|null $country
      * @return \Symfony\Component\Form\FormInterface
      */
-    private function createCountryForm(): FormInterface
+    private function createCountryForm(?Country $country = null): FormInterface
     {
-        return $this->factory->create(CountryFormType::class, null, ['country' => null]);
+        return $this->factory->create(CountryFormType::class, null, ['country' => $country]);
     }
 }
