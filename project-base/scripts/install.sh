@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 numberRegex="^[0-9]+([.][0-9]+)?$"
 operatingSystem=""
 allowedValues=(1 2 3)
