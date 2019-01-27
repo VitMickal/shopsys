@@ -1,13 +1,13 @@
 #!/bin/bash
-numberRegex='^[0-9]+([.][0-9]+)?$'
-operatingSystem=''
+numberRegex="^[0-9]+([.][0-9]+)?$"
+operatingSystem=""
 allowedValues=(1 2 3)
-projectPathPrefix=''
+projectPathPrefix=""
 declare -A operatingSystemsByIndex
 
-operatingSystemsByIndex[1]='Linux'
-operatingSystemsByIndex[2]='Mac'
-operatingSystemsByIndex[3]='Mac'
+operatingSystemsByIndex[1]="Linux"
+operatingSystemsByIndex[2]="Mac"
+operatingSystemsByIndex[3]="Mac"
 
 echo This is installation script that will install demo Shopsys Framework application on docker with all required containers and with demo database created.
 
