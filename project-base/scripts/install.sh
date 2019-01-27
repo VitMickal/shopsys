@@ -1,17 +1,21 @@
 #!/bin/bash
 numberRegex='^[0-9]+([.][0-9]+)?$'
 operatingSystem=''
-allowedValues=(1 2)
+allowedValues=(1 2 3)
+projectPathPrefix=''
 declare -A operatingSystemsByIndex
 
 operatingSystemsByIndex[1]='Linux'
 operatingSystemsByIndex[2]='Mac'
+operatingSystemsByIndex[3]='Mac'
 
 echo This is installation script that will install demo Shopsys Framework application on docker with all required containers and with demo database created.
 
 echo "Start with specifying your operating system: \
+
     1) Linux
     2) Mac
+    3) Windows
     "
 
 while [[ 1 -eq 1 ]]
@@ -29,13 +33,17 @@ done
 
 echo "You chosed ${operatingSystemsByIndex[$operatingSystem]}. Now your app will be installed.."
 
+if [[ -d "project-base" ]]; then
+    ${projectPathPrefix}="project-base/"
+    echo "You are in monorepo, prefixing paths app paths with ${projectPathPrefix}"
+fi
+
 echo "Creating config files.."
-cp -f app/config/parameters.yml.dist app/config/parameters.yml
-cp -f app/config/parameters_test.yml.dist app/config/parameters_test.yml
-cp -f app/config/domains_urls.yml.dist app/config/domains_urls.yml
+cp -f ${projectPathPrefix}app/config/parameters.yml.dist ${projectPathPrefix}app/config/parameters.yml
+cp -f ${projectPathPrefix}app/config/parameters_test.yml.dist ${projectPathPrefix}app/config/parameters_test.yml
+cp -f ${projectPathPrefix}app/config/domains_urls.yml.dist ${projectPathPrefix}app/config/domains_urls.yml
 
-
-echo "Creating docker configurations.."
+echo "Creating docker configuration.."
 case "$operatingSystem" in
     "1")
         cp -f docker/conf/docker-compose.yml.dist docker-compose.yml
@@ -47,7 +55,14 @@ case "$operatingSystem" in
         echo "You will be asked to enter sudo password in case to allow second domain alias in your system config.."
         sudo ifconfig lo0 alias 127.0.0.2 up
 
-        mkdir -p var/postgres-data var/elasticsearch-data vendor
+        mkdir -p ${projectPathPrefix}var/postgres-data ${projectPathPrefix}var/elasticsearch-data vendor
+        docker-sync start
+        ;;
+    "3")
+        cp -f docker/conf/docker-compose-win.yml.dist docker-compose.yml
+        cp -f docker/conf/docker-sync-win.yml.dist docker-sync.yml
+
+        mkdir -p ${projectPathPrefix}var/postgres-data ${projectPathPrefix}var/elasticsearch-data vendor
         docker-sync start
         ;;
 esac

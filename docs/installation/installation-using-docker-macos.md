@@ -29,13 +29,13 @@ cd project-base
 - *The `--stability=beta` option enables you to install the project from the last beta release. Default value for the option is `stable` but there is no stable release yet.*
 
 ### 1.1 Use install script
-In case you want to start demo of app as fast as possible, you can now execute install script.
+In case you want to start demo of the app as fast as possible, you can now execute install script.
 
 ```
 ./sripts/install.sh
 ```
 
-If you want to know more about what is happening during installation, continue with step `1.2`
+If you want to know more about what is happening during installation, continue with next step.
 
 ### 1.2 Enable second domain (optional)
 There are two domains each for different language in default installation. First one is available via IP adress `127.0.O.1` and second one via `127.0.0.2`.
